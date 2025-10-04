@@ -196,7 +196,7 @@ export const BrandManagerView: React.FC = () => {
         <div className="text-center">
           <div className="flex items-center justify-start mb-2">
             <BarChart3 className={`${themeClasses.text} mr-3 animate-pulse`} size={32} />
-            <h2 className={`text-3xl font-bold ${themeClasses.text} bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent`}>
+            <h2 className={`text-3xl font-bold ${themeClasses.text} bg-gradient-to-r from-blue-600 to-gray-600 bg-clip-text text-transparent`}>
               Brand Manager Performance Monitor
             </h2>
           </div>

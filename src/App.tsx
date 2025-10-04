@@ -13,6 +13,8 @@ import { BrandKit } from './components/BrandKit';
 import { Integrations } from './components/Integrations';
 import Login from './components/Login';
 import { BrandManagerView } from './components/BrandManagerView';
+import { PerformanceAgentView } from './components/PerformanceAgentView';
+import { MarketingStudio } from './components/MarketingStudio';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -37,10 +39,14 @@ function App() {
         return <AgentManagement />;
       case 'performance':
         return <PerformanceCockpit />;
+          case 'performanceagent':
+        return <PerformanceAgentView />;
       case 'admin':
         return <AdminControls />;
           case 'brandmanager':
         return <BrandManagerView />;
+          case 'marketingstudio':
+        return <MarketingStudio />;
       default:
         return <Dashboard />;
     }

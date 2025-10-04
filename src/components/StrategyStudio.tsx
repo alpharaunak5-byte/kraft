@@ -1,66 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  Sparkles, 
-  Target, 
-  TrendingUp, 
-  Zap, 
-  Moon,
-  Sun,
-  Send,
-  Bot,
-  User,
-  Lightbulb,
-  Brain,
-  Rocket,
-  Wand2,
-  ChevronDown,
-  Palette,
-  Settings,
-  Calendar,
-  Users as UsersIcon,
-  FileText,
-  Download,
-  Share2,
-  Copy,
-  Star,
-  BarChart3,
-  Shield,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Mic,
-  Globe,
-  Bookmark,
-  Filter,
-  RefreshCw,
-  Database,
-  Activity,
-  Award,
-  Layers,
-  Eye,
-  MousePointer,
-  DollarSign,
-  GitBranch,
-  AlertCircle,
-  Save,
-  Plus,
-  Search,
-  MessageSquare,
-  Users,
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin,
-  Youtube,
-  Mail,
-  MoreHorizontal,
-  Play,
-  Pause,
-  Edit3,
-  Fence
-} from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, Target, TrendingUp, Zap, Moon, Sun, Send, Bot, User, Lightbulb, Brain, Rocket, Wand2, ChevronDown, Palette, Settings, Calendar, Users as UsersIcon, FileText, Download, Share2, Copy, Star, BarChart3, Shield, Clock, CheckCircle, AlertTriangle, Mic, Globe, Bookmark, Filter, RefreshCw, Database, Activity, Award, Layers, Eye, MousePointer, DollarSign, GitBranch, AlertCircle, Save, Plus, Search, MessageSquare, Users, Facebook, Instagram, Twitter, Linkedin, Youtube, Mail, MoreHorizontal, Play, Pause, CreditCard as Edit3, Fence, Check } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface SearchQuery {
@@ -119,6 +58,7 @@ export const StrategyStudio: React.FC = ({onTabChange}) => {
   const [editedResponse, setEditedResponse] = useState<any>(null);
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [showAdvancedFeatures, setShowAdvancedFeatures] = useState(false);
+  const [showAdvanceModal, setShowAdvanceModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('');
   const [industryVertical, setIndustryVertical] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('en');
@@ -1033,11 +973,11 @@ const simulateThinkingTasks = () => {
                         </>
                       )}
                       <button
-                        // onClick={() => setShowAlternatives(!showAlternatives)}
+                        onClick={() => setShowAdvanceModal(true)}
                         className={`flex items-center px-4 py-2 ${theme === 'neon' ? 'bg-gradient-to-r from-blue-600 to-teal-600' : 'bg-blue-500'} text-white rounded-xl hover:opacity-90 transition-all`}
                       >
                         <Fence  size={16} className="mr-2" />
-                        Advance 
+                        Advance
                       </button>
                     </div>
                   </div>
@@ -1865,6 +1805,184 @@ const simulateThinkingTasks = () => {
         {activeTab === 'analytics' && renderAnalytics()}
         {activeTab === 'templates' && renderTemplates()}
       </div>
+
+      {/* Advance Modal */}
+      {showAdvanceModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className={`${themeClasses.cardBg} rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border ${themeClasses.border}`}>
+            {/* Modal Header */}
+            <div className={`sticky top-0 ${themeClasses.cardBg} border-b ${themeClasses.border} p-6 flex items-center justify-between z-10`}>
+              <div className="flex items-center">
+                <Fence className="text-blue-500 mr-3" size={24} />
+                <h3 className={`text-xl font-bold ${themeClasses.text}`}>Advanced Campaign Options</h3>
+              </div>
+              <button
+                onClick={() => setShowAdvanceModal(false)}
+                className={`p-2 rounded-lg ${themeClasses.hover} transition-all`}
+              >
+                <svg className={themeClasses.text} width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Campaign Optimization */}
+              <div className={`${themeClasses.cardBg} border ${themeClasses.border} rounded-xl p-4`}>
+                <h4 className={`font-semibold ${themeClasses.text} mb-3 flex items-center`}>
+                  <TrendingUp className="mr-2 text-green-500" size={18} />
+                  Campaign Optimization
+                </h4>
+                <div className="space-y-3">
+                  <label className="flex items-center justify-between">
+                    <span className={`text-sm ${themeClasses.textSecondary}`}>Auto-optimize budget allocation</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
+                  </label>
+                  <label className="flex items-center justify-between">
+                    <span className={`text-sm ${themeClasses.textSecondary}`}>A/B testing enabled</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
+                  </label>
+                  <label className="flex items-center justify-between">
+                    <span className={`text-sm ${themeClasses.textSecondary}`}>Dynamic content optimization</span>
+                    <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
+                  </label>
+                </div>
+              </div>
+
+              {/* Target Audience */}
+              <div className={`${themeClasses.cardBg} border ${themeClasses.border} rounded-xl p-4`}>
+                <h4 className={`font-semibold ${themeClasses.text} mb-3 flex items-center`}>
+                  <Target className="mr-2 text-red-500" size={18} />
+                  Target Audience Refinement
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Age Range</label>
+                    <div className="flex gap-3">
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        className={`flex-1 p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        className={`flex-1 p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Geographic Targeting</label>
+                    <select className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}>
+                      <option>Global</option>
+                      <option>North America</option>
+                      <option>Europe</option>
+                      <option>Asia Pacific</option>
+                      <option>Custom Regions</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Budget & Timeline */}
+              <div className={`${themeClasses.cardBg} border ${themeClasses.border} rounded-xl p-4`}>
+                <h4 className={`font-semibold ${themeClasses.text} mb-3 flex items-center`}>
+                  <DollarSign className="mr-2 text-yellow-500" size={18} />
+                  Budget & Timeline
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Total Budget ($)</label>
+                    <input
+                      type="number"
+                      placeholder="Enter budget amount"
+                      className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Start Date</label>
+                      <input
+                        type="date"
+                        className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>End Date</label>
+                      <input
+                        type="date"
+                        className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Performance Goals */}
+              <div className={`${themeClasses.cardBg} border ${themeClasses.border} rounded-xl p-4`}>
+                <h4 className={`font-semibold ${themeClasses.text} mb-3 flex items-center`}>
+                  <Activity className="mr-2 text-blue-500" size={18} />
+                  Performance Goals
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Target ROAS</label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      placeholder="e.g., 3.5"
+                      className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                    />
+                  </div>
+                  <div>
+                    <label className={`text-sm font-medium ${themeClasses.text} block mb-2`}>Target Conversions</label>
+                    <input
+                      type="number"
+                      placeholder="Number of conversions"
+                      className={`w-full p-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text}`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Assistance */}
+              <div className={`bg-gradient-to-r from-blue-500/10 to-teal-500/10 border ${themeClasses.border} rounded-xl p-4`}>
+                <h4 className={`font-semibold ${themeClasses.text} mb-3 flex items-center`}>
+                  <Sparkles className="mr-2 text-teal-500" size={18} />
+                  AI-Powered Recommendations
+                </h4>
+                <p className={`text-sm ${themeClasses.textSecondary} mb-3`}>
+                  Let AI analyze your campaign and provide optimization suggestions
+                </p>
+                <button className="w-full py-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg hover:opacity-90 transition-all flex items-center justify-center">
+                  <Sparkles size={16} className="mr-2" />
+                  Get AI Recommendations
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className={`sticky bottom-0 ${themeClasses.cardBg} border-t ${themeClasses.border} p-6 flex justify-end gap-3`}>
+              <button
+                onClick={() => setShowAdvanceModal(false)}
+                className={`px-6 py-2 ${themeClasses.cardBg} border ${themeClasses.border} rounded-xl ${themeClasses.text} hover:bg-gray-100 transition-all`}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowAdvanceModal(false);
+                }}
+                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-xl hover:opacity-90 transition-all flex items-center"
+              >
+                <Check size={16} className="mr-2" />
+                Apply Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fade-in {
