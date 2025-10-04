@@ -1,11 +1,92 @@
 import React, { useState } from 'react';
-import { Shield, Users, Database, Settings, Activity, AlertTriangle, CheckCircle, Lock, Wrench, Brain, Zap, Network, Key } from 'lucide-react';
+import { Shield, Users, Database, Settings, Activity, AlertTriangle, CheckCircle, Lock, Wrench, Brain, Zap, Network, Key, FileCheck, Clock, User, Calendar, DollarSign, Target, Eye, ThumbsUp, ThumbsDown, MessageSquare, Filter, Search, TrendingUp } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 export const AdminControls: React.FC = () => {
   const { getThemeClasses } = useTheme();
   const themeClasses = getThemeClasses();
   const [activeSection, setActiveSection] = useState('overview');
+
+  const pendingCampaigns = [
+    {
+      id: '1',
+      name: 'Holiday Sale 2024 Campaign',
+      type: 'Conversion',
+      submittedBy: 'Sarah Johnson',
+      submittedAt: '2024-12-20T10:30:00',
+      budget: 25000,
+      duration: '30 days',
+      platforms: ['Facebook', 'Instagram', 'Google Ads'],
+      status: 'pending',
+      priority: 'high',
+      description: 'Comprehensive holiday sales campaign targeting fashion-conscious consumers aged 25-45 with focus on gift purchases and seasonal promotions.',
+      objectives: ['Increase sales by 40%', 'Drive website traffic', 'Build brand awareness'],
+      targetAudience: 'Adults 25-45, fashion interested, holiday shoppers',
+      estimatedReach: '2.5M',
+      estimatedROAS: '4.2x'
+    },
+    {
+      id: '2',
+      name: 'Q1 Brand Awareness Push',
+      type: 'Awareness',
+      submittedBy: 'Mike Chen',
+      submittedAt: '2024-12-19T14:15:00',
+      budget: 15000,
+      duration: '45 days',
+      platforms: ['YouTube', 'LinkedIn', 'Twitter'],
+      status: 'pending',
+      priority: 'medium',
+      description: 'Brand awareness campaign to establish market presence in new geographic regions with emphasis on thought leadership content.',
+      objectives: ['Increase brand recognition', 'Generate qualified leads', 'Establish thought leadership'],
+      targetAudience: 'Business professionals 30-55, decision makers',
+      estimatedReach: '1.8M',
+      estimatedROAS: '2.8x'
+    },
+    {
+      id: '3',
+      name: 'Product Launch - Smart Home Series',
+      type: 'Conversion',
+      submittedBy: 'Emily Rodriguez',
+      submittedAt: '2024-12-18T09:45:00',
+      budget: 35000,
+      duration: '60 days',
+      platforms: ['Google Ads', 'Facebook', 'Instagram', 'YouTube'],
+      status: 'under_review',
+      priority: 'high',
+      description: 'Launch campaign for new smart home product line targeting tech-savvy homeowners with focus on innovation and convenience.',
+      objectives: ['Drive pre-orders', 'Build product awareness', 'Generate leads'],
+      targetAudience: 'Homeowners 28-50, tech enthusiasts, high income',
+      estimatedReach: '3.2M',
+      estimatedROAS: '5.1x'
+    }
+  ];
+
+  const approvalHistory = [
+    {
+      id: '1',
+      campaignName: 'Black Friday Mega Sale',
+      approver: 'Admin User',
+      action: 'approved',
+      timestamp: '2024-12-15T16:20:00',
+      comments: 'Excellent strategy and budget allocation. Approved for immediate launch.'
+    },
+    {
+      id: '2',
+      campaignName: 'Winter Collection Launch',
+      approver: 'Marketing Director',
+      action: 'rejected',
+      timestamp: '2024-12-14T11:30:00',
+      comments: 'Budget exceeds quarterly allocation. Please revise and resubmit with reduced spend.'
+    },
+    {
+      id: '3',
+      campaignName: 'Customer Retention Program',
+      approver: 'Admin User',
+      action: 'approved',
+      timestamp: '2024-12-13T13:45:00',
+      comments: 'Well-structured retention strategy. Approved with minor budget adjustments.'
+    }
+  ];
 
   const systemHealth = {
     database: 'healthy',
@@ -70,6 +151,7 @@ export const AdminControls: React.FC = () => {
             {[
               { id: 'overview', label: 'Overview', icon: Activity },
               { id: 'agents', label: 'Agents', icon: Users },
+              { id: 'approvals', label: 'Campaign Approvals', icon: FileCheck },
               { id: 'tools', label: 'Tools', icon: Wrench },
               { id: 'guardrails', label: 'Guardrails', icon: Shield },
               { id: 'models', label: 'Models', icon: Brain },
@@ -91,7 +173,7 @@ export const AdminControls: React.FC = () => {
                 >
                   <Icon size={14} className="mr-1 md:mr-2" />
                   <span className="hidden md:inline">{tab.label}</span>
-                  <span className="md:hidden">{tab.id === 'overview' ? 'Over' : tab.id === 'agents' ? 'Agnt' : tab.id === 'tools' ? 'Tool' : tab.id === 'guardrails' ? 'Guard' : tab.id === 'models' ? 'Model' : tab.id === 'workflows' ? 'Work' : tab.id === 'knowledge' ? 'Know' : tab.id === 'security' ? 'Sec' : 'Set'}</span>
+                  <span className="md:hidden">{tab.id === 'overview' ? 'Over' : tab.id === 'agents' ? 'Agnt' : tab.id === 'approvals' ? 'Appr' : tab.id === 'tools' ? 'Tool' : tab.id === 'guardrails' ? 'Guard' : tab.id === 'models' ? 'Model' : tab.id === 'workflows' ? 'Work' : tab.id === 'knowledge' ? 'Know' : tab.id === 'security' ? 'Sec' : 'Set'}</span>
                 </button>
               );
             })}
@@ -213,6 +295,279 @@ export const AdminControls: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Campaign Approvals */}
+        {activeSection === 'approvals' && (
+          <div className="space-y-6">
+            {/* Approvals Overview */}
+            <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6`}>
+              <h3 className={`text-xl font-semibold ${themeClasses.text} mb-6`}>Campaign Approval Dashboard</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+                  <h4 className="font-semibold text-yellow-900 mb-2">Pending Approval</h4>
+                  <p className="text-3xl font-bold text-yellow-600">{pendingCampaigns.filter(c => c.status === 'pending').length}</p>
+                  <p className="text-sm text-yellow-700">Awaiting review</p>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                  <h4 className="font-semibold text-blue-900 mb-2">Under Review</h4>
+                  <p className="text-3xl font-bold text-blue-600">{pendingCampaigns.filter(c => c.status === 'under_review').length}</p>
+                  <p className="text-sm text-blue-700">Being evaluated</p>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-4">
+                  <h4 className="font-semibold text-green-900 mb-2">Approved Today</h4>
+                  <p className="text-3xl font-bold text-green-600">5</p>
+                  <p className="text-sm text-green-700">Ready to launch</p>
+                </div>
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+                  <h4 className="font-semibold text-red-900 mb-2">Rejected</h4>
+                  <p className="text-3xl font-bold text-red-600">2</p>
+                  <p className="text-sm text-red-700">Need revision</p>
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={16} />
+                    <input
+                      type="text"
+                      placeholder="Search campaigns..."
+                      className={`pl-9 pr-4 py-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text} focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}
+                    />
+                  </div>
+                  
+                  <select className={`px-3 py-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text} focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}>
+                    <option>All Status</option>
+                    <option>Pending</option>
+                    <option>Under Review</option>
+                    <option>Approved</option>
+                    <option>Rejected</option>
+                  </select>
+                  
+                  <select className={`px-3 py-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg ${themeClasses.text} focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm`}>
+                    <option>All Priority</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Pending Campaigns */}
+            <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6`}>
+              <h4 className={`font-semibold ${themeClasses.text} mb-6`}>Campaigns Awaiting Approval</h4>
+              
+              <div className="space-y-4">
+                {pendingCampaigns.map((campaign) => (
+                  <div key={campaign.id} className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-xl p-6 ${themeClasses.hover} transition-all`}>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h5 className={`text-lg font-semibold ${themeClasses.text}`}>{campaign.name}</h5>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            campaign.priority === 'high' ? 'bg-red-100 text-red-800' :
+                            campaign.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-green-100 text-green-800'
+                          }`}>
+                            {campaign.priority} priority
+                          </span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            campaign.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {campaign.status.replace('_', ' ')}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-6 text-sm text-gray-600 mb-3">
+                          <div className="flex items-center space-x-1">
+                            <User size={14} />
+                            <span>By {campaign.submittedBy}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Calendar size={14} />
+                            <span>{new Date(campaign.submittedAt).toLocaleDateString()}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Target size={14} />
+                            <span>{campaign.type}</span>
+                          </div>
+                        </div>
+                        
+                        <p className={`${themeClasses.textSecondary} text-sm mb-4`}>{campaign.description}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Campaign Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                      <div className={`p-3 ${themeClasses.cardBg} rounded-lg`}>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <DollarSign size={14} className="text-green-600" />
+                          <span className="text-xs font-medium text-gray-600">Budget</span>
+                        </div>
+                        <p className={`font-semibold ${themeClasses.text}`}>${campaign.budget.toLocaleString()}</p>
+                      </div>
+                      
+                      <div className={`p-3 ${themeClasses.cardBg} rounded-lg`}>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <Clock size={14} className="text-blue-600" />
+                          <span className="text-xs font-medium text-gray-600">Duration</span>
+                        </div>
+                        <p className={`font-semibold ${themeClasses.text}`}>{campaign.duration}</p>
+                      </div>
+                      
+                      <div className={`p-3 ${themeClasses.cardBg} rounded-lg`}>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <Eye size={14} className="text-purple-600" />
+                          <span className="text-xs font-medium text-gray-600">Est. Reach</span>
+                        </div>
+                        <p className={`font-semibold ${themeClasses.text}`}>{campaign.estimatedReach}</p>
+                      </div>
+                      
+                      <div className={`p-3 ${themeClasses.cardBg} rounded-lg`}>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <TrendingUp size={14} className="text-green-600" />
+                          <span className="text-xs font-medium text-gray-600">Est. ROAS</span>
+                        </div>
+                        <p className={`font-semibold ${themeClasses.text}`}>{campaign.estimatedROAS}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Platforms */}
+                    <div className="mb-4">
+                      <span className="text-xs font-medium text-gray-600 mb-2 block">Platforms:</span>
+                      <div className="flex flex-wrap gap-2">
+                        {campaign.platforms.map((platform, index) => (
+                          <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                            {platform}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Objectives */}
+                    <div className="mb-4">
+                      <span className="text-xs font-medium text-gray-600 mb-2 block">Objectives:</span>
+                      <div className="space-y-1">
+                        {campaign.objectives.map((objective, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-gray-600">{objective}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Target Audience */}
+                    <div className="mb-6">
+                      <span className="text-xs font-medium text-gray-600 mb-2 block">Target Audience:</span>
+                      <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{campaign.targetAudience}</p>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                      <button className={`flex items-center px-4 py-2 ${themeClasses.border} border rounded-lg ${themeClasses.text} ${themeClasses.hover} transition-colors text-sm`}>
+                        <Eye size={16} className="mr-2" />
+                        View Details
+                      </button>
+                      
+                      <div className="flex space-x-3">
+                        <button className="flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm">
+                          <ThumbsDown size={16} className="mr-2" />
+                          Reject
+                        </button>
+                        <button className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm">
+                          <ThumbsUp size={16} className="mr-2" />
+                          Approve
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Approval History */}
+            <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6`}>
+              <h4 className={`font-semibold ${themeClasses.text} mb-6`}>Recent Approval History</h4>
+              
+              <div className="space-y-4">
+                {approvalHistory.map((item) => (
+                  <div key={item.id} className={`flex items-center justify-between p-4 ${themeClasses.cardBg} rounded-xl ${themeClasses.hover} transition-colors`}>
+                    <div className="flex items-center space-x-4">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        item.action === 'approved' ? 'bg-green-100' : 'bg-red-100'
+                      }`}>
+                        {item.action === 'approved' ? (
+                          <ThumbsUp className="text-green-600" size={20} />
+                        ) : (
+                          <ThumbsDown className="text-red-600" size={20} />
+                        )}
+                      </div>
+                      <div>
+                        <h5 className={`font-medium ${themeClasses.text}`}>{item.campaignName}</h5>
+                        <p className={`text-sm ${themeClasses.textSecondary}`}>
+                          {item.action === 'approved' ? 'Approved' : 'Rejected'} by {item.approver} • {new Date(item.timestamp).toLocaleDateString()}
+                        </p>
+                        {item.comments && (
+                          <p className="text-xs text-gray-500 mt-1 bg-gray-50 p-2 rounded italic">
+                            "{item.comments}"
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      item.action === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {item.action}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Approval Settings */}
+            <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6`}>
+              <h4 className={`font-semibold ${themeClasses.text} mb-6`}>Approval Workflow Settings</h4>
+              
+              <div className="space-y-4">
+                <div className={`flex items-center justify-between p-4 ${themeClasses.cardBg} rounded-xl ${themeClasses.hover} transition-colors`}>
+                  <div>
+                    <h5 className={`font-medium ${themeClasses.text}`}>Auto-approve campaigns under $5,000</h5>
+                    <p className={`text-sm ${themeClasses.textSecondary}`}>Automatically approve low-budget campaigns</p>
+                  </div>
+                  <button className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors text-sm">
+                    Enabled
+                  </button>
+                </div>
+                
+                <div className={`flex items-center justify-between p-4 ${themeClasses.cardBg} rounded-xl ${themeClasses.hover} transition-colors`}>
+                  <div>
+                    <h5 className={`font-medium ${themeClasses.text}`}>Require dual approval for high-budget campaigns</h5>
+                    <p className={`text-sm ${themeClasses.textSecondary}`}>Campaigns over $25,000 need two approvals</p>
+                  </div>
+                  <button className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors text-sm">
+                    Enabled
+                  </button>
+                </div>
+                
+                <div className={`flex items-center justify-between p-4 ${themeClasses.cardBg} rounded-xl ${themeClasses.hover} transition-colors`}>
+                  <div>
+                    <h5 className={`font-medium ${themeClasses.text}`}>Email notifications for pending approvals</h5>
+                    <p className={`text-sm ${themeClasses.textSecondary}`}>Send daily digest of campaigns awaiting approval</p>
+                  </div>
+                  <button className={`px-4 py-2 ${themeClasses.accent} text-white rounded-xl hover:opacity-90 transition-colors text-sm`}>
+                    Configure
+                  </button>
+                </div>
               </div>
             </div>
           </div>

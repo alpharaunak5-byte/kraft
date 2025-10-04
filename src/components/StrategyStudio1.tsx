@@ -147,9 +147,9 @@ export const StrategyStudio1: React.FC = () => {
     setCampaigns(sampleCampaigns);
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  // }, [chatMessages]);
 
   const handleSendMessage = async () => {
     if (!campaignPrompt.trim()) return;
@@ -828,12 +828,19 @@ export const StrategyStudio1: React.FC = () => {
   );
 
   return (
-    <div className={`min-h-screen ${themeClasses.bg} transition-all duration-500`}>
+     <div className={`min-h-screen max-h-screen overflow-auto transition-all duration-500  ${themeClasses.bg}`}>
       <div className="space-y-6 md:space-y-8 p-6 md:p-8">
-        <div className="text-center mb-8">
-          <h2 className={`text-xl md:text-2xl font-bold ${themeClasses.text} mb-2`}>Campaign Studio</h2>
-          <p className={`text-sm ${themeClasses.textSecondary}`}>Create, manage, and optimize your marketing campaigns with AI assistance</p>
-        </div>
+           <div className="text-center flex-1">
+                            <div className="flex items-center justify-start mb-2">
+                              <Brain className={`${themeClasses.text} mr-3 animate-pulse`} size={32} />
+                              <h2 className={`text-3xl font-bold ${themeClasses.text} bg-gradient-to-r from-blue-600 to-gray-600 bg-clip-text text-transparent`}>
+                           Campaign Simulations
+                              </h2>
+                            </div>
+                            <p className={`${themeClasses.textSecondary} flex items-center justify-start animate-fade-in`}>
+                            Create, manage, and optimize your marketing campaigns with AI assistance
+                            </p>
+                          </div>
 
         {/* Tab Navigation */}
         <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-xl p-2`}>
@@ -865,6 +872,15 @@ export const StrategyStudio1: React.FC = () => {
         {activeTab === 'analytics' && renderAnalytics()}
         {activeTab === 'templates' && renderTemplates()}
       </div>
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

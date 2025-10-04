@@ -60,10 +60,136 @@ export const AgentManagement: React.FC = () => {
   const [testInput, setTestInput] = useState('');
   const [isTesting, setIsTesting] = useState(false);
 
-  const agents: Agent[] = [
+  // const agents: Agent[] = [
+  //   {
+  //     id: "1",
+  //     name: "Content Creator Agent",
+  //     role: "Creative Generation",
+  //     status: "active",
+  //     permissions: ["create_campaigns", "edit_creatives", "view_analytics"],
+  //     lastActive: "2 hours ago",
+  //     performance: "excellent",
+  //     tasksCompleted: 45,
+  //     description: "Specialized in creating engaging marketing content across multiple platforms with brand consistency.",
+  //     model: "GPT-4 Turbo",
+  //     version: "v2.1.3",
+  //     accuracy: 94.2,
+  //     responseTime: 1.3,
+  //     successRate: 87.8,
+  //     capabilities: ["Content Writing", "Creative Ideation", "Brand Voice", "Multi-platform Adaptation"],
+  //     parameters: {
+  //       temperature: 0.7,
+  //       maxTokens: 2048,
+  //       topP: 0.9,
+  //       frequencyPenalty: 0.1
+  //     },
+  //     trainingData: {
+  //       lastUpdated: "2024-12-15",
+  //       dataPoints: 15000,
+  //       sources: ["Brand Guidelines", "Previous Campaigns", "Industry Best Practices"]
+  //     },
+  //     testResults: [
+  //       {
+  //         id: "1",
+  //         query: "Create a social media post for holiday sale",
+  //         response: "🎄 Holiday Magic is Here! ✨\n\nUnwrap incredible savings with our Holiday Sale! Get up to 50% off your favorite items and make this season unforgettable.\n\n🎁 Free shipping on orders over $75\n🎁 Extended returns through January\n🎁 Gift wrapping available\n\nShop now and spread the joy! Link in bio 👆\n\n#HolidaySale #GiftIdeas #ShopNow",
+  //         score: 92,
+  //         timestamp: new Date('2024-12-20T10:30:00')
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Performance Optimizer",
+  //     role: "Campaign Optimization",
+  //     status: "active",
+  //     permissions: ["optimize_campaigns", "view_analytics", "generate_reports"],
+  //     lastActive: "15 minutes ago",
+  //     performance: "good",
+  //     tasksCompleted: 32,
+  //     description: "Analyzes campaign performance data and provides optimization recommendations for better ROI.",
+  //     model: "Claude-3 Sonnet",
+  //     version: "v1.8.2",
+  //     accuracy: 91.5,
+  //     responseTime: 0.8,
+  //     successRate: 89.3,
+  //     capabilities: ["Data Analysis", "Performance Optimization", "A/B Testing", "ROI Calculation"],
+  //     parameters: {
+  //       temperature: 0.3,
+  //       maxTokens: 1024,
+  //       topP: 0.8,
+  //       frequencyPenalty: 0.0
+  //     },
+  //     trainingData: {
+  //       lastUpdated: "2024-12-18",
+  //       dataPoints: 25000,
+  //       sources: ["Campaign Data", "Performance Metrics", "Industry Benchmarks"]
+  //     },
+  //     testResults: []
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Strategy Analyst",
+  //     role: "Strategic Planning",
+  //     status: "training",
+  //     permissions: ["create_strategies", "approve_campaigns", "view_all_data"],
+  //     lastActive: "1 day ago",
+  //     performance: "fair",
+  //     tasksCompleted: 28,
+  //     description: "Develops comprehensive marketing strategies based on market analysis and business objectives.",
+  //     model: "GPT-4",
+  //     version: "v1.5.1",
+  //     accuracy: 88.7,
+  //     responseTime: 2.1,
+  //     successRate: 82.4,
+  //     capabilities: ["Strategic Planning", "Market Analysis", "Competitive Research", "Goal Setting"],
+  //     parameters: {
+  //       temperature: 0.5,
+  //       maxTokens: 3072,
+  //       topP: 0.85,
+  //       frequencyPenalty: 0.2
+  //     },
+  //     trainingData: {
+  //       lastUpdated: "2024-12-10",
+  //       dataPoints: 12000,
+  //       sources: ["Market Research", "Strategy Frameworks", "Case Studies"]
+  //     },
+  //     testResults: []
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Quality Assurance Bot",
+  //     role: "Content Review",
+  //     status: "inactive",
+  //     permissions: ["review_content", "approve_creatives"],
+  //     lastActive: "3 days ago",
+  //     performance: "good",
+  //     tasksCompleted: 15,
+  //     description: "Reviews and validates content for brand compliance, quality standards, and regulatory requirements.",
+  //     model: "Custom Model",
+  //     version: "v3.0.1",
+  //     accuracy: 96.8,
+  //     responseTime: 0.5,
+  //     successRate: 94.2,
+  //     capabilities: ["Content Review", "Brand Compliance", "Quality Control", "Regulatory Check"],
+  //     parameters: {
+  //       temperature: 0.1,
+  //       maxTokens: 512,
+  //       topP: 0.7,
+  //       frequencyPenalty: 0.0
+  //     },
+  //     trainingData: {
+  //       lastUpdated: "2024-12-12",
+  //       dataPoints: 8000,
+  //       sources: ["Brand Guidelines", "Compliance Rules", "Quality Standards"]
+  //     },
+  //     testResults: []
+  //   }
+  // ];
+    const agents: Agent[] = [
     {
       id: "1",
-      name: "Content Creator Agent",
+      name: "Segmentation Agent",
       role: "Creative Generation",
       status: "active",
       permissions: ["create_campaigns", "edit_creatives", "view_analytics"],
@@ -100,7 +226,7 @@ export const AgentManagement: React.FC = () => {
     },
     {
       id: "2",
-      name: "Performance Optimizer",
+      name: "Performance Agent",
       role: "Campaign Optimization",
       status: "active",
       permissions: ["optimize_campaigns", "view_analytics", "generate_reports"],
@@ -129,7 +255,7 @@ export const AgentManagement: React.FC = () => {
     },
     {
       id: "3",
-      name: "Strategy Analyst",
+      name: "Causal Agent",
       role: "Strategic Planning",
       status: "training",
       permissions: ["create_strategies", "approve_campaigns", "view_all_data"],

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Image as ImageIcon, Video, Wand2, Settings, Download, Share2, RefreshCw, Plus, ChevronDown, Play, Pause, Eye, Heart, MessageCircle, Send, Check, X, ArrowRight, ArrowLeft, Upload, Palette, Type, LayoutGrid as Layout, Zap, Brain, Cpu, Database, CheckCircle, Clock, AlertCircle, CreditCard as Edit3, Copy, Trash2, MoreHorizontal, Instagram, Facebook, Twitter, Youtube, Linkedin, Globe, Smartphone, Monitor, Tablet, Star, Layers, Filter, Maximize2, Minimize2, BarChart3Icon } from 'lucide-react';
+import { Sparkles, Image as ImageIcon, Video, Wand2, Settings, Download, Share2, RefreshCw, Plus, ChevronDown, Play, Pause, Eye, Heart, MessageCircle, Send, Check, X, ArrowRight, ArrowLeft, Upload, Palette, Type, LayoutGrid as Layout, Zap, Brain, Cpu, Database, CheckCircle, Clock, AlertCircle, CreditCard as Edit3, Copy, Trash2, MoreHorizontal, Instagram, Facebook, Twitter, Youtube, Linkedin, Globe, Smartphone, Monitor, Tablet, Star, Layers, Filter, Maximize2, Minimize2, BarChart3Icon, Target, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import video_file from "./video.mp4"
 import img_1 from "./1.jpg"
@@ -30,6 +30,20 @@ interface Platform {
   dimensions: string;
   aspectRatio: string;
   color: string;
+}
+
+interface Campaign {
+  id: string;
+  name: string;
+  status: 'draft' | 'pending' | 'approved' | 'running' | 'paused' | 'completed';
+  type: 'awareness' | 'conversion' | 'engagement' | 'retention';
+  budget: number;
+  startDate: string;
+  endDate: string;
+  platforms: string[];
+  audience: string;
+  objectives: string[];
+  createdAt: Date;
 }
 
 export const CreatorStudio: React.FC = () => {
@@ -256,24 +270,21 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
 
       {/* Content Type Selection */}
 <div className={`${themeClasses.cardBg} rounded-xl p-4 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
-   <h3 className={`text-2xl font-bold ${themeClasses.text} mb-6 flex items-center`}>
-          <Layout className="mr-3 text-blue-500" size={28} />
-          Choose Content Type
-        </h3>
-  <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
+ <h3 className={`text-lg font-semibold ${themeClasses.text} mb-2`}>Campaign Selection</h3>
+  <div className="grid grid-cols-1 sm:grid-cols-8 gap-4">
     <button
       onClick={() => setContentType('image')}
-      className={`group p-4 rounded-xl border-2 transition-all duration-150 transform hover:scale-100 ${
+      className={` p-2 rounded-xl border-2 transition-all duration-150 transform hover:scale-100 flex justify-center ${
         contentType === 'image' 
           ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-50 shadow-sm shadow-blue-500/20' 
           : `${themeClasses.border} ${themeClasses.cardBg} ${themeClasses.hover}`
       }`}
     >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all duration-150 ${
+      {/* <div className={`rounded-xl flex items-center justify-center mx-auto  transition-all duration-150 ${
         contentType === 'image' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-blue-100 group-hover:text-blue-500'
       }`}>
         <ImageIcon size={24} />
-      </div>
+      </div> */}
       <h4 className={`text-lg font-medium mb-1 ${contentType === 'image' ? 'text-blue-900' : themeClasses.text}`}>
         Image Generation
       </h4>
@@ -281,17 +292,17 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
 
     <button
       onClick={() => setContentType('video')}
-      className={`group p-4 rounded-xl border-2 transition-all duration-150 transform hover:scale-100 ${
+      className={`flex justify-center  items-center p-2 rounded-xl border-2 transition-all duration-150 transform hover:scale-100 ${
         contentType === 'video' 
           ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-50 shadow-sm shadow-blue-500/20' 
           : `${themeClasses.border} ${themeClasses.cardBg} ${themeClasses.hover}`
       }`}
     >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all duration-150 ${
+      {/* <div className={` rounded-xl flex items-center justify-center mx-auto  transition-all duration-150 ${
         contentType === 'video' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-blue-100 group-hover:text-blue-500'
       }`}>
         <Video size={24} />
-      </div>
+      </div> */}
       <h4 className={`text-lg font-medium mb-1 ${contentType === 'video' ? 'text-blue-900' : themeClasses.text}`}>
         Video Generation
       </h4>
@@ -865,6 +876,8 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
     </div>
   );
 
+  
+
   const renderSendForApproval = () => (
     <div className="space-y-6">
       <div className={`${themeClasses.cardBg} rounded-2xl p-6 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
@@ -878,7 +891,7 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h4 className={`font-bold ${themeClasses.text} mb-3`}>Content Summary</h4>
             <div className="space-y-2 text-sm">
@@ -907,6 +920,212 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
     </div>
   );
 
+    // Sample campaigns data
+    const campaigns: Campaign[] = [
+      {
+        id: '1',
+        name: 'Holiday Sale 2024',
+        status: 'running',
+        type: 'conversion',
+        budget: 15000,
+        startDate: '2024-12-01',
+        endDate: '2024-12-31',
+        platforms: ['facebook', 'instagram', 'google'],
+        audience: 'Adults 25-45, interested in fashion',
+        objectives: ['Boost sales', 'Increase website traffic'],
+        createdAt: new Date('2024-11-15'),
+      },
+      {
+        id: '2',
+        name: 'Brand Awareness Q1',
+        status: 'approved',
+        type: 'awareness',
+        budget: 8000,
+        startDate: '2025-01-01',
+        endDate: '2025-03-31',
+        platforms: ['facebook', 'instagram', 'youtube'],
+        audience: 'Young adults 18-35',
+        objectives: ['Improve brand awareness', 'Enhance customer engagement'],
+        createdAt: new Date('2024-12-10'),
+      },
+      {
+        id: '3',
+        name: 'Product Launch Campaign',
+        status: 'draft',
+        type: 'conversion',
+        budget: 25000,
+        startDate: '2025-02-01',
+        endDate: '2025-02-28',
+        platforms: ['google', 'linkedin', 'email'],
+        audience: 'Business professionals 30-50',
+        objectives: ['Generate leads', 'Promote new product launch'],
+        createdAt: new Date('2024-12-15'),
+      }
+    ];
+
+
+  
+
+  const [showCampaignDropdown, setShowCampaignDropdown] = useState(false);
+    const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+    const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'running': return 'bg-green-100 text-green-800';
+      case 'approved': return 'bg-blue-100 text-blue-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'paused': return 'bg-orange-100 text-orange-800';
+      case 'completed': return 'bg-gray-100 text-gray-800';
+      case 'draft': return 'bg-purple-100 text-purple-800';
+      case 'review': return 'bg-yellow-100 text-yellow-800';
+      case 'rejected': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'running': return <Play size={14} className="text-green-600" />;
+      case 'approved': return <CheckCircle size={14} className="text-blue-600" />;
+      case 'pending': return <Clock size={14} className="text-yellow-600" />;
+      case 'paused': return <Pause size={14} className="text-orange-600" />;
+      case 'completed': return <CheckCircle size={14} className="text-gray-600" />;
+      case 'draft': return <Edit3 size={14} className="text-purple-600" />;
+      case 'review': return <Eye size={14} className="text-yellow-600" />;
+      case 'rejected': return <AlertTriangle size={14} className="text-red-600" />;
+      default: return <AlertTriangle size={14} className="text-gray-600" />;
+    }
+  };
+
+  const handleCampaignSelect = (campaign: Campaign | null) => {
+    setSelectedCampaign(campaign);
+    setShowCampaignDropdown(false);
+  };
+
+  const handleProceedWithoutCampaign = () => {
+    setSelectedCampaign(null);
+    setShowCampaignDropdown(false);
+  };
+    const renderCampaignSelector = () => (
+    <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6 mb-6`}>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className={`text-lg font-semibold ${themeClasses.text} mb-2`}>Campaign Selection</h3>
+          <p className={`text-sm ${themeClasses.textSecondary}`}>
+            Select a campaign to create targeted creatives, or proceed without a campaign for general assets
+          </p>
+        </div>
+        <Target className={`${themeClasses.textSecondary}`} size={24} />
+      </div>
+
+      <div className="relative">
+        <button
+          onClick={() => setShowCampaignDropdown(!showCampaignDropdown)}
+          className={`w-full p-4 ${themeClasses.cardBg} ${themeClasses.border} border rounded-xl ${themeClasses.text} ${themeClasses.hover} transition-colors flex items-center justify-between`}
+        >
+          <div className="flex items-center space-x-3">
+            {selectedCampaign ? (
+              <>
+                <div className={`w-10 h-10 bg-${selectedCampaign.type === 'conversion' ? 'green' : selectedCampaign.type === 'awareness' ? 'blue' : 'purple'}-100 rounded-lg flex items-center justify-center`}>
+                  <Target className={`text-${selectedCampaign.type === 'conversion' ? 'green' : selectedCampaign.type === 'awareness' ? 'blue' : 'purple'}-600`} size={20} />
+                </div>
+                <div className="text-left">
+                  <p className={`font-medium ${themeClasses.text}`}>{selectedCampaign.name}</p>
+                  <p className={`text-sm ${themeClasses.textSecondary}`}>
+                    {selectedCampaign.type.charAt(0).toUpperCase() + selectedCampaign.type.slice(1)} • ${selectedCampaign.budget.toLocaleString()} budget
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={`w-10 h-10 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg flex items-center justify-center`}>
+                  <Target className={`${themeClasses.textSecondary}`} size={20} />
+                </div>
+                <div className="text-left">
+                  <p className={`font-medium ${themeClasses.text}`}>Select Campaign</p>
+                  <p className={`text-sm ${themeClasses.textSecondary}`}>Choose a campaign or proceed without one</p>
+                </div>
+              </>
+            )}
+          </div>
+          <ChevronDown className={`${themeClasses.textSecondary} transform transition-transform ${showCampaignDropdown ? 'rotate-180' : ''}`} size={20} />
+        </button>
+
+        {showCampaignDropdown && (
+          <div className={`absolute top-full left-0 right-0 mt-2 ${themeClasses.cardBg} ${themeClasses.border} border rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto`}>
+            {/* No Campaign Option */}
+            <button
+              onClick={handleProceedWithoutCampaign}
+              className={`w-full p-4 ${themeClasses.hover} transition-colors flex items-center space-x-3 border-b ${themeClasses.border}`}
+            >
+              <div className={`w-10 h-10 ${themeClasses.cardBg} ${themeClasses.border} border rounded-lg flex items-center justify-center`}>
+                <Wand2 className={`${themeClasses.textSecondary}`} size={20} />
+              </div>
+              <div className="text-left">
+                <p className={`font-medium ${themeClasses.text}`}>No Campaign</p>
+                <p className={`text-sm ${themeClasses.textSecondary}`}>Create general creative assets</p>
+              </div>
+            </button>
+
+            {/* Campaign Options */}
+            {campaigns.map((campaign) => (
+              <button
+                key={campaign.id}
+                onClick={() => handleCampaignSelect(campaign)}
+                className={`w-full p-4 ${themeClasses.hover} transition-colors flex items-center justify-between ${
+                  selectedCampaign?.id === campaign.id ? `bg-blue-50 border-l-4 border-blue-500` : ''
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 bg-${campaign.type === 'conversion' ? 'green' : campaign.type === 'awareness' ? 'blue' : 'purple'}-100 rounded-lg flex items-center justify-center`}>
+                    <Target className={`text-${campaign.type === 'conversion' ? 'green' : campaign.type === 'awareness' ? 'blue' : 'purple'}-600`} size={20} />
+                  </div>
+                  <div className="text-left">
+                    <p className={`font-medium ${themeClasses.text}`}>{campaign.name}</p>
+                    <p className={`text-sm ${themeClasses.textSecondary}`}>
+                      {campaign.type.charAt(0).toUpperCase() + campaign.type.slice(1)} • ${campaign.budget.toLocaleString()} budget
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
+                    {getStatusIcon(campaign.status)}
+                    <span className="ml-1 capitalize">{campaign.status}</span>
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {selectedCampaign && (
+        <div className={`mt-4 p-4 ${themeClasses.gradient} rounded-xl`}>
+          <h4 className={`font-medium ${themeClasses.text} mb-2`}>Campaign Details</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className={`p-3 ${themeClasses.cardBg}/70 rounded-lg`}>
+              <p className={`text-xs ${themeClasses.textSecondary} mb-1`}>Duration</p>
+              <p className={`font-semibold ${themeClasses.text} text-sm`}>
+                {new Date(selectedCampaign.startDate).toLocaleDateString()} - {new Date(selectedCampaign.endDate).toLocaleDateString()}
+              </p>
+            </div>
+            <div className={`p-3 ${themeClasses.cardBg}/70 rounded-lg`}>
+              <p className={`text-xs ${themeClasses.textSecondary} mb-1`}>Platforms</p>
+              <p className={`font-semibold ${themeClasses.text} text-sm`}>
+                {selectedCampaign.platforms.join(', ')}
+              </p>
+            </div>
+            <div className={`p-3 ${themeClasses.cardBg}/70 rounded-lg`}>
+              <p className={`text-xs ${themeClasses.textSecondary} mb-1`}>Audience</p>
+              <p className={`font-semibold ${themeClasses.text} text-sm truncate`}>
+                {selectedCampaign.audience}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
      <div className={`min-h-screen max-h-screen overflow-auto ${themeClasses.bg} transition-all duration-500`}>
     <div className="space-y-6 md:space-y-8 p-6 md:p-8">
@@ -923,6 +1142,9 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
                     </p>
                   </div>
       {renderStepIndicator()}
+
+        {/* Campaign Selector */}
+        {activeStep === 0 && renderCampaignSelector()}
       
       {activeStep === 0 && renderCreateContent()}
       {activeStep === 1 && renderAIVerification()}
