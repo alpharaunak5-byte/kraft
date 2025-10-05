@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { CheckCircle, Calendar, Play, Pause, TrendingUp, Eye, MousePointer, DollarSign, Target, Sparkles, Image as ImageIcon, Video, FileText, Download, CreditCard as Edit3, Copy, Trash2, Settings, BarChart3, AlertTriangle, ThumbsUp, Clock, Users, Globe, Activity, Zap, Bot, ArrowRight, ChevronRight, ExternalLink, Filter, Search, CalendarCheck, FolderOpen, TrendingDown, AlertCircle, Plus, ChevronDown, ChevronUp, CheckCircle2, Info, Settings2, Rocket } from "lucide-react";
+import { CheckCircle, Calendar, Play, Pause, TrendingUp, Eye, MousePointer, DollarSign, Target, Sparkles, Image as ImageIcon, Video, FileText, Download, CreditCard as Edit3, Copy, Trash2, Settings, BarChart3, AlertTriangle, ThumbsUp, Clock, Users, Globe, Activity, Zap, Bot, ArrowRight, ChevronRight, ExternalLink, Filter, Search, CalendarCheck, FolderOpen, TrendingDown, AlertCircle, Plus, ChevronDown, ChevronUp, CheckCircle2, Info, Settings2 } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { PromotionCalendar } from "./PromotionCalendar";
 import { CampaignDetailView } from "./CampaignDetailView";
-import { CampaignExecution } from "./CampaignExecution";
 
 interface Creative {
   id: string;
@@ -68,12 +67,11 @@ interface MetricCard {
   icon: React.ComponentType<any>;
 }
 
-export const MarketingStudio: React.FC = () => {
+export const MarketingStudio3: React.FC = () => {
   const { getThemeClasses } = useTheme();
   const themeClasses = getThemeClasses();
-  const [activeSection, setActiveSection] = useState<"overview" | "scheduler" | "calendar" | "run">("overview");
+  const [activeSection, setActiveSection] = useState<"overview" | "scheduler" | "calendar">("overview");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
-  const [campaignToRun, setCampaignToRun] = useState<Campaign | null>(null);
   const [campaignStatus, setCampaignStatus] = useState<"paused" | "running">("paused");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -85,7 +83,6 @@ export const MarketingStudio: React.FC = () => {
     { id: "overview", label: "Campaign Overview", icon: FolderOpen },
     { id: "scheduler", label: "Campaign Scheduler", icon: Target },
     { id: "calendar", label: "Calendar", icon: Calendar },
-    { id: "run", label: "Run Campaign", icon: Rocket },
   ];
 
   const approvedCampaigns: Campaign[] = [
@@ -591,7 +588,7 @@ export const MarketingStudio: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-gray-200 mb-3">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                 <div className="flex items-center space-x-1">
                   <Globe className="text-gray-400" size={14} />
                   <span className={`text-xs ${themeClasses.textSecondary}`}>
@@ -605,20 +602,6 @@ export const MarketingStudio: React.FC = () => {
                   </span>
                 </div>
               </div>
-
-              {campaign.status === 'approved' && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCampaignToRun(campaign);
-                    setActiveSection('run');
-                  }}
-                  className="w-full flex items-center justify-center space-x-2 py-2 px-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-md"
-                >
-                  <Rocket size={16} />
-                  <span className="text-sm font-medium">Run Campaign</span>
-                </button>
-              )}
             </div>
           ))}
         </div>
@@ -956,35 +939,6 @@ export const MarketingStudio: React.FC = () => {
         {activeSection === "overview" && renderCampaignOverview()}
         {activeSection === "scheduler" && renderCampaignScheduler()}
         {activeSection === "calendar" && <PromotionCalendar />}
-        {activeSection === "run" && campaignToRun && (
-          <CampaignExecution
-            campaign={campaignToRun}
-            onBack={() => {
-              setActiveSection('overview');
-              setCampaignToRun(null);
-            }}
-            onLaunch={() => {
-              alert(`Campaign "${campaignToRun.name}" launched successfully!`);
-              setActiveSection('overview');
-              setCampaignToRun(null);
-            }}
-          />
-        )}
-        {activeSection === "run" && !campaignToRun && (
-          <div className="text-center py-12">
-            <AlertCircle className="mx-auto text-gray-400 mb-3" size={48} />
-            <p className={`text-lg font-semibold ${themeClasses.text} mb-1`}>No Campaign Selected</p>
-            <p className={`text-sm ${themeClasses.textSecondary} mb-4`}>
-              Please select an approved campaign to run
-            </p>
-            <button
-              onClick={() => setActiveSection('overview')}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Go to Overview
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

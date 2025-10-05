@@ -15,6 +15,8 @@ import Login from './components/Login';
 import { BrandManagerView } from './components/BrandManagerView';
 import { PerformanceAgentView } from './components/PerformanceAgentView';
 import { MarketingStudio } from './components/MarketingStudio';
+import Marketing from './components/MarketingStucio1';
+import { MarketingStudio3 } from './components/MarketingStudio3';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -47,6 +49,10 @@ function App() {
         return <BrandManagerView />;
           case 'marketingstudio':
         return <MarketingStudio />;
+        case 'marketingstudio2':
+        return <Marketing />;
+        case 'marketingstudio3':
+        return <MarketingStudio3 />;
       default:
         return <Dashboard />;
     }
