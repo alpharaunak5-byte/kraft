@@ -30,7 +30,7 @@ function App() {
       case 'dashboard':
         return <Dashboard onTabChange={setActiveTab} />;
       case 'creator':
-        return <CreatorStudio />;
+        return <CreatorStudio setActiveTab={setActiveTab}/>;
       case 'brandkit':
         return <BrandKit />;
       case 'integrations':

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Image as ImageIcon, Video, Wand2, Settings, Download, Share2, RefreshCw, Plus, ChevronDown, Play, Pause, Eye, Heart, MessageCircle, Send, Check, X, ArrowRight, ArrowLeft, Upload, Palette, Type, LayoutGrid as Layout, Zap, Brain, Cpu, Database, CheckCircle, Clock, AlertCircle, CreditCard as Edit3, Copy, Trash2, MoreHorizontal, Instagram, Facebook, Twitter, Youtube, Linkedin, Globe, Smartphone, Monitor, Tablet, Star, Layers, Filter, Maximize2, Minimize2, BarChart3Icon, Target, AlertTriangle } from 'lucide-react';
+import { Sparkles, Image as ImageIcon, Video, Wand2, Settings, Download, Share2, RefreshCw, Plus, ChevronDown, Play, Pause, Eye, Heart, MessageCircle, Send, Check, X, ArrowRight, ArrowLeft, Upload, Palette, Type, LayoutGrid as Layout, Zap, Brain, Cpu, Database, CheckCircle, Clock, AlertCircle, CreditCard as Edit3, Copy, Trash2, MoreHorizontal, Instagram, Facebook, Twitter, Youtube, Linkedin, Globe, Smartphone, Monitor, Tablet, Star, Layers, Filter, Maximize2, Minimize2, BarChart3Icon, Target, AlertTriangle, FileType } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import video_file from "./video.mp4"
 import img_1 from "./1.jpg"
@@ -46,7 +46,7 @@ interface Campaign {
   createdAt: Date;
 }
 
-export const CreatorStudio: React.FC = () => {
+export const CreatorStudio: React.FC = ({setActiveTab}) => {
   const { getThemeClasses } = useTheme();
   const themeClasses = getThemeClasses();
   
@@ -56,7 +56,7 @@ export const CreatorStudio: React.FC = () => {
   const [selectedLogoPlacement, setSelectedLogoPlacement] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedStyling, setSelectedStyling] = useState('');
-  const [contentType, setContentType] = useState<'image' | 'video'>('image');
+  const [contentType, setContentType] = useState<any>('image');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedAssets, setGeneratedAssets] = useState<GeneratedAsset[]>([]);
   const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
@@ -76,12 +76,13 @@ export const CreatorStudio: React.FC = () => {
 
   const steps: CreationStep[] = [
     { id: 'create', title: 'Create Content', status: 'active', description: 'Generate images/videos with AI' },
-    { id: 'verify', title: 'AI Verification', status: 'pending', description: 'Automated quality checks' },
+    // { id: 'verify', title: 'AI Verification', status: 'pending', description: 'Automated quality checks' },
     { id: 'preview', title: 'Preview', status: 'pending', description: 'Platform-specific previews' },
     { id: 'approval', title: 'Send for Approval', status: 'pending', description: 'Submit for review' }
   ];
 
   const brandKits = ['Default Brand', 'Holiday Theme', 'Minimal Style', 'Corporate'];
+  const creativeTypes = ['image', 'video'];
   const logoPlacement = ['Top Left', 'Top Right', 'Bottom Left', 'Bottom Right', 'Center', 'None'];
   const formats = ['Square (1:1)', 'Portrait (4:5)', 'Landscape (16:9)', 'Story (9:16)', 'Custom'];
   const styling = ['Modern', 'Vintage', 'Minimalist', 'Bold', 'Elegant', 'Playful'];
@@ -107,6 +108,7 @@ export const CreatorStudio: React.FC = () => {
   ];
 
   const handleGenerate = async () => {
+    setSelectedAssets([])
     if (!prompt.trim()) return;
 
     setIsGenerating(true);
@@ -177,10 +179,10 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
     if (selectedAssets.length === 0) return;
     
     // Move to AI Verification step
-    setActiveStep(1);
-    setTimeout(() => {
-      setActiveStep(2); // Move to Preview after verification
-    }, 3000);
+    setActiveStep(2);
+    // setTimeout(() => {
+    //   setActiveStep(2); // Move to Preview after verification
+    // }, 3000);
   };
 
   const handleApprove = () => {
@@ -254,22 +256,8 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
 
   const renderCreateContent = () => (
     <div className="space-y-8">
-      {/* Hero Section */}
-      {/* <div className={`${themeClasses.gradient} rounded-3xl p-8 text-center relative overflow-hidden`}>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-blue-600/20"></div>
-        <div className="relative z-10">
-          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Sparkles size={40} className="text-white" />
-          </div>
-          <h2 className={`text-3xl font-bold ${themeClasses.text} mb-4`}>AI-Powered Content Creation</h2>
-          <p className={`text-lg ${themeClasses.textSecondary} max-w-2xl mx-auto`}>
-            Transform your ideas into stunning visuals with our advanced AI technology
-          </p>
-        </div>
-      </div> */}
 
-      {/* Content Type Selection */}
-<div className={`${themeClasses.cardBg} rounded-xl p-4 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
+{/* <div className={`${themeClasses.cardBg} rounded-xl p-4 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-2`}>Campaign Selection</h3>
   <div className="grid grid-cols-1 sm:grid-cols-8 gap-4">
     <button
@@ -280,11 +268,6 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
           : `${themeClasses.border} ${themeClasses.cardBg} ${themeClasses.hover}`
       }`}
     >
-      {/* <div className={`rounded-xl flex items-center justify-center mx-auto  transition-all duration-150 ${
-        contentType === 'image' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-blue-100 group-hover:text-blue-500'
-      }`}>
-        <ImageIcon size={24} />
-      </div> */}
       <h4 className={`text-lg font-medium mb-1 ${contentType === 'image' ? 'text-blue-900' : themeClasses.text}`}>
         Image Generation
       </h4>
@@ -298,17 +281,157 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
           : `${themeClasses.border} ${themeClasses.cardBg} ${themeClasses.hover}`
       }`}
     >
-      {/* <div className={` rounded-xl flex items-center justify-center mx-auto  transition-all duration-150 ${
-        contentType === 'video' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-blue-100 group-hover:text-blue-500'
-      }`}>
-        <Video size={24} />
-      </div> */}
+
       <h4 className={`text-lg font-medium mb-1 ${contentType === 'video' ? 'text-blue-900' : themeClasses.text}`}>
         Video Generation
       </h4>
     </button>
   </div>
-</div>
+</div> */}
+
+      {/* Configuration Options */}
+      <div className={`${themeClasses.cardBg} rounded-3xl p-8 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
+        <h3 className={`text-2xl font-bold ${themeClasses.text} mb-8 flex items-center`}>
+          <Settings className="mr-3 text-blue-500" size={28} />
+          Configuration Options
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+         {/* Creation Type Dropdown */}
+          <div className="space-y-3">
+            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
+              <FileType className="mr-2 text-blue-500" size={20} />
+             Creation Type
+            </label>
+            <div className="relative">
+              <select
+                value={contentType}
+                onChange={(e) => setContentType(e.target.value)}
+                className={`w-full p-4 capitalize ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
+              >
+                {/* <option value="">Image</option> */}
+                {creativeTypes.map(kit => (
+                  <option key={kit} className='capitalize'  value={kit}>{kit}</option>
+                ))}
+              </select>
+              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
+            </div>
+          </div>
+
+          {/* Brand Kit Dropdown */}
+          <div className="space-y-3">
+            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
+              <Palette className="mr-2 text-blue-500" size={20} />
+              Brand Kit
+            </label>
+            <div className="relative">
+              <select
+                value={selectedBrandKit}
+                onChange={(e) => setSelectedBrandKit(e.target.value)}
+                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
+              >
+                <option value="">Select Brand Kit</option>
+                {brandKits.map(kit => (
+                  <option key={kit} value={kit}>{kit}</option>
+                ))}
+              </select>
+              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
+            </div>
+            <button
+              onClick={() => setShowAddBrandKit(true)}
+            //  onClick={() => setActiveStep("brandkit")}
+              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
+            >
+              <Plus size={18} className="mr-2" />
+              Add New Brand Kit
+            </button>
+          </div>
+
+          {/* Logo Placement Dropdown */}
+          <div className="space-y-3">
+            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
+              <Star className="mr-2 text-blue-500" size={20} />
+              Logo Placement
+            </label>
+            <div className="relative">
+              <select
+                value={selectedLogoPlacement}
+                onChange={(e) => setSelectedLogoPlacement(e.target.value)}
+                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
+              >
+                <option value="">Select Logo Placement</option>
+                {logoPlacement.map(placement => (
+                  <option key={placement} value={placement}>{placement}</option>
+                ))}
+              </select>
+              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
+            </div>
+            {/* <button
+              onClick={() => setShowAddLogoPlacement(true)}
+              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
+            >
+              <Plus size={18} className="mr-2" />
+              Add New Placement
+            </button> */}
+          </div>
+
+          {/* Format Dropdown */}
+          <div className="space-y-3">
+            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
+              <Maximize2 className="mr-2 text-blue-500" size={20} />
+              Format
+            </label>
+            <div className="relative">
+              <select
+                value={selectedFormat}
+                onChange={(e) => setSelectedFormat(e.target.value)}
+                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
+              >
+                <option value="">Select Format</option>
+                {formats.map(format => (
+                  <option key={format} value={format}>{format}</option>
+                ))}
+              </select>
+              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
+            </div>
+            {/* <button
+              onClick={() => setShowAddFormat(true)}
+              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
+            >
+              <Plus size={18} className="mr-2" />
+              Add New Format
+            </button> */}
+          </div>
+
+          {/* Styling Dropdown */}
+          <div className="space-y-3">
+            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
+              <Type className="mr-2 text-blue-500" size={20} />
+              Styling
+            </label>
+            <div className="relative">
+              <select
+                value={selectedStyling}
+                onChange={(e) => setSelectedStyling(e.target.value)}
+                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
+              >
+                <option value="">Select Styling</option>
+                {styling.map(style => (
+                  <option key={style} value={style}>{style}</option>
+                ))}
+              </select>
+              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
+            </div>
+            {/* <button
+              onClick={() => setShowAddStyling(true)}
+              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
+            >
+              <Plus size={18} className="mr-2" />
+              Add New Style
+            </button> */}
+          </div>
+        </div>
+      </div>
 
 
 
@@ -340,127 +463,7 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
         </div>
       </div>
 
-      {/* Configuration Options */}
-      <div className={`${themeClasses.cardBg} rounded-3xl p-8 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
-        {/* <h3 className={`text-2xl font-bold ${themeClasses.text} mb-8 flex items-center`}>
-          <Settings className="mr-3 text-blue-500" size={28} />
-          Configuration Options
-        </h3>
-         */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand Kit Dropdown */}
-          <div className="space-y-3">
-            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
-              <Palette className="mr-2 text-blue-500" size={20} />
-              Brand Kit
-            </label>
-            <div className="relative">
-              <select
-                value={selectedBrandKit}
-                onChange={(e) => setSelectedBrandKit(e.target.value)}
-                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
-              >
-                <option value="">Select Brand Kit</option>
-                {brandKits.map(kit => (
-                  <option key={kit} value={kit}>{kit}</option>
-                ))}
-              </select>
-              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
-            </div>
-            <button
-              onClick={() => setShowAddBrandKit(true)}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
-            >
-              <Plus size={18} className="mr-2" />
-              Add New Brand Kit
-            </button>
-          </div>
 
-          {/* Logo Placement Dropdown */}
-          <div className="space-y-3">
-            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
-              <Star className="mr-2 text-blue-500" size={20} />
-              Logo Placement
-            </label>
-            <div className="relative">
-              <select
-                value={selectedLogoPlacement}
-                onChange={(e) => setSelectedLogoPlacement(e.target.value)}
-                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
-              >
-                <option value="">Select Logo Placement</option>
-                {logoPlacement.map(placement => (
-                  <option key={placement} value={placement}>{placement}</option>
-                ))}
-              </select>
-              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
-            </div>
-            <button
-              onClick={() => setShowAddLogoPlacement(true)}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
-            >
-              <Plus size={18} className="mr-2" />
-              Add New Placement
-            </button>
-          </div>
-
-          {/* Format Dropdown */}
-          <div className="space-y-3">
-            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
-              <Maximize2 className="mr-2 text-blue-500" size={20} />
-              Format
-            </label>
-            <div className="relative">
-              <select
-                value={selectedFormat}
-                onChange={(e) => setSelectedFormat(e.target.value)}
-                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
-              >
-                <option value="">Select Format</option>
-                {formats.map(format => (
-                  <option key={format} value={format}>{format}</option>
-                ))}
-              </select>
-              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
-            </div>
-            <button
-              onClick={() => setShowAddFormat(true)}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
-            >
-              <Plus size={18} className="mr-2" />
-              Add New Format
-            </button>
-          </div>
-
-          {/* Styling Dropdown */}
-          <div className="space-y-3">
-            <label className={`block text-lg font-semibold ${themeClasses.text} flex items-center`}>
-              <Type className="mr-2 text-blue-500" size={20} />
-              Styling
-            </label>
-            <div className="relative">
-              <select
-                value={selectedStyling}
-                onChange={(e) => setSelectedStyling(e.target.value)}
-                className={`w-full p-4 ${themeClasses.cardBg} border-2 ${themeClasses.border} rounded-2xl ${themeClasses.text} focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 appearance-none text-lg`}
-              >
-                <option value="">Select Styling</option>
-                {styling.map(style => (
-                  <option key={style} value={style}>{style}</option>
-                ))}
-              </select>
-              <ChevronDown className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${themeClasses.textSecondary}`} size={24} />
-            </div>
-            <button
-              onClick={() => setShowAddStyling(true)}
-              className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium"
-            >
-              <Plus size={18} className="mr-2" />
-              Add New Style
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Generation Process */}
       {isGenerating && (
@@ -542,11 +545,12 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
                 {selectedAssets.length} of {generatedAssets.length} selected
               </span>
               <button
-                onClick={handleSaveAssets}
-                disabled={selectedAssets.length === 0}
+                // onClick={handleSaveAssets}
+                disabled={selectedAssets.length === 0 || isGenerating}
+                onClick={handleGenerate}
                 className={`px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-500  text-white rounded-2xl hover:from-blue-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-bold text-lg shadow-xl shadow-blue-500/30`}
               >
-                Save Selected ({selectedAssets.length})
+                Regenerate Selected ({selectedAssets.length})
               </button>
             </div>
           </div>
@@ -624,7 +628,7 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
       )}
 
       {/* Generate Button */}
-      <div className="flex justify-center">
+      {!generatedAssets.length&&<div className="flex justify-center">
         <button
           onClick={handleGenerate}
           disabled={!prompt.trim() || isGenerating}
@@ -644,7 +648,16 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
             </>
           )}
         </button>
-      </div>
+      </div>}
+{generatedAssets.length&&<div className="flex justify-center">
+       <button
+                onClick={handleSaveAssets}
+                disabled={selectedAssets.length === 0 || isGenerating}
+                className={`px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-500  text-white rounded-2xl hover:from-blue-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed font-bold text-lg shadow-xl shadow-blue-500/30`}
+              >
+               Save and next ({selectedAssets.length})
+              </button>
+      </div>}
     </div>
   );
 
@@ -861,10 +874,10 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
       {/* Action Buttons */}
       <div className="flex justify-center space-x-4">
         <button
-          onClick={() => setActiveStep(1)}
+          onClick={() => setActiveStep(0)}
           className="px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors font-medium"
         >
-          Back to Verification
+          Back to Create Content
         </button>
         <button
           onClick={handleApprove}
@@ -877,7 +890,7 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
   );
 
   
-
+const [approvalFlag,setApprovalFlag] = useState<boolean>()
   const renderSendForApproval = () => (
     <div className="space-y-6">
       <div className={`${themeClasses.cardBg} rounded-2xl p-6 ${themeClasses.shadow} border-2 ${themeClasses.border}`}>
@@ -911,12 +924,22 @@ const mockAssets: GeneratedAsset[] = Array.from({ length: 6 }, (_, index) => ({
           </div>
         </div>
         
-        <div className="flex justify-center mt-8">
-          <button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-500  text-white rounded-xl hover:from-blue-600 hover:to-blue-600 transition-all font-bold shadow-lg shadow-blue-500/30">
+        <div className="flex justify-center gap-4 mt-8">
+            <button
+          onClick={() => setActiveStep(2)}
+          className="px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors font-medium"
+        >
+          Back to Preview
+        </button>
+          <button onClick={()=>setApprovalFlag(true)} className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-500  text-white rounded-xl hover:from-blue-600 hover:to-blue-600 transition-all font-bold shadow-lg shadow-blue-500/30">
             Submit for Approval
           </button>
-        </div>
+           <button onClick={()=>setActiveTab("marketingstudio")}  className={`${true?"from-blue-500 to-blue-500  text-white  hover:from-blue-600 hover:to-blue-600  shadow-blue-500/30":"bg-gray-300 text-black"} px-8 py-3 bg-gradient-to-r rounded-xl transition-all font-bold shadow-lg`}>
+            Run Campaign
+          </button>
       </div>
+        </div>
+  
     </div>
   );
 
