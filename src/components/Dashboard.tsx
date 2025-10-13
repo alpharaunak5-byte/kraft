@@ -38,10 +38,7 @@ import {
   Monitor,
   Tablet,
   Lightbulb,
-  ArrowUpRight,
-  X,
-  TrendingUp as TrendUp,
-  Activity
+  ArrowUpRight
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -92,11 +89,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTabChange }) => {
   const [selectedChannel, setSelectedChannel] = useState('all');
   const [selectedSpend, setSelectedSpend] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showPublishingModal, setShowPublishingModal] = useState(false);
-  const [showMonitorModal, setShowMonitorModal] = useState(false);
-  const [showSegmentModal, setShowSegmentModal] = useState(false);
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
-  const [campaignStatuses, setCampaignStatuses] = useState<Record<string, 'active' | 'paused' | 'completed' | 'draft'>>({});
 
   // Performance metrics for last 90 days
   const performanceMetrics: PerformanceMetric[] = [
@@ -261,43 +253,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTabChange }) => {
     if (onTabChange) {
       onTabChange('strategy');
     }
-  };
-
-  const handleViewPublishing = (campaign: Campaign) => {
-    setSelectedCampaign(campaign);
-    setShowPublishingModal(true);
-  };
-
-  const handleMonitorCampaign = (campaign: Campaign) => {
-    setSelectedCampaign(campaign);
-    setShowMonitorModal(true);
-  };
-
-  const handleViewSegment = (campaign: Campaign) => {
-    setSelectedCampaign(campaign);
-    setShowSegmentModal(true);
-  };
-
-  const handleCloneCampaign = (campaign: Campaign) => {
-    const clonedCampaign = {
-      ...campaign,
-      id: `${campaign.id}-clone-${Date.now()}`,
-      name: `${campaign.name} (Copy)`,
-      status: 'draft' as const
-    };
-    alert(`Campaign "${campaign.name}" has been cloned successfully as "${clonedCampaign.name}"`);
-  };
-
-  const handlePauseCampaign = (campaign: Campaign) => {
-    setCampaignStatuses(prev => ({ ...prev, [campaign.id]: 'paused' }));
-  };
-
-  const handleResumeCampaign = (campaign: Campaign) => {
-    setCampaignStatuses(prev => ({ ...prev, [campaign.id]: 'active' }));
-  };
-
-  const getCampaignStatus = (campaign: Campaign) => {
-    return campaignStatuses[campaign.id] || campaign.status;
   };
 
   return (
@@ -522,17 +477,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTabChange }) => {
                     <button className={`p-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors`}>
                       <Copy size={16} className={themeClasses.textSecondary} />
                     </button>
-                    <button
-                      onClick={() => window.open(`/campaign/${campaign.id}/external`, '_blank')}
-                      className={`p-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors`}
-                      title="Open in new tab"
-                    >
+                    <button className={`p-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors`}>
                       <ExternalLink size={16} className={themeClasses.textSecondary} />
                     </button>
-                    <button
-                      onClick={() => handleViewSegment(campaign)}
-                      className={`px-3 py-2 ${themeClasses.accent} text-white rounded-lg hover:opacity-90 transition-colors text-sm font-medium`}
-                    >
+                    <button className={`px-3 py-2 ${themeClasses.accent} text-white rounded-lg hover:opacity-90 transition-colors text-sm font-medium`}>
                       View Segment
                     </button>
                   </div>
@@ -590,43 +538,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTabChange }) => {
                 {/* Campaign Actions */}
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center space-x-3">
-                    <button
-                      onClick={() => handleViewPublishing(campaign)}
-                      className={`flex items-center px-4 py-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors text-sm font-medium`}
-                    >
+                    <button className={`flex items-center px-4 py-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors text-sm font-medium`}>
                       <Eye size={16} className="mr-2" />
                       View Publishing
                     </button>
-                    <button
-                      onClick={() => handleMonitorCampaign(campaign)}
-                      className={`flex items-center px-4 py-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors text-sm font-medium`}
-                    >
+                    <button className={`flex items-center px-4 py-2 ${themeClasses.border} border rounded-lg ${themeClasses.hover} transition-colors text-sm font-medium`}>
                       <BarChart3 size={16} className="mr-2" />
                       Monitor Campaign
                     </button>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleCloneCampaign(campaign)}
-                      className={`flex items-center px-3 py-2 ${themeClasses.accent} text-white rounded-lg hover:opacity-90 transition-colors text-sm font-medium`}
-                    >
+                    <button className={`flex items-center px-3 py-2 ${themeClasses.accent} text-white rounded-lg hover:opacity-90 transition-colors text-sm font-medium`}>
                       <Copy size={16} className="mr-2" />
                       Clone Campaign
                     </button>
-                    {getCampaignStatus(campaign) === 'active' && (
-                      <button
-                        onClick={() => handlePauseCampaign(campaign)}
-                        className={`flex items-center px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium`}
-                      >
+                    {campaign.status === 'active' && (
+                      <button className={`flex items-center px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium`}>
                         <Pause size={16} className="mr-2" />
                         Pause
                       </button>
                     )}
-                    {getCampaignStatus(campaign) === 'paused' && (
-                      <button
-                        onClick={() => handleResumeCampaign(campaign)}
-                        className={`flex items-center px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium`}
-                      >
+                    {campaign.status === 'paused' && (
+                      <button className={`flex items-center px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium`}>
                         <Play size={16} className="mr-2" />
                         Resume
                       </button>
@@ -637,311 +570,83 @@ export const Dashboard: React.FC<DashboardProps> = ({ onTabChange }) => {
             ))}
           </div>
         </div>
+        {/* <div className='flex w-full justify-center'>
+          <button 
+                onClick={handleCreateCampaign}
+                className="w-[200px] py-3 px-6 text-white bg-blue-600 rounded-xl hover:text-blue-50 transition-all font-medium flex gap-2 items-center"
+              >
+                <Plus className="inline mr-2" size={16} />
+                Create with AI
+              </button>
+
+   </div> */}
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Get Inspired */}
+          <div className="bg-gradient-to-br from-orange-50 to-pink-50 rounded-2xl border border-orange-200 p-8 hover:border-orange-300 hover:shadow-lg transition-all group cursor-pointer">
+            <div className="flex items-start space-x-4">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-orange-500 to-pink-600">
+                <Lightbulb className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-orange-600 transition-colors">
+                  Get Inspired
+                </h3>
+                <p className="text-slate-600 mb-4">
+                  Create a new campaign based on performance of executed campaigns. Let AI analyze your best performers and suggest optimizations.
+                </p>
+                <button className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-pink-600 text-white hover:shadow-lg rounded-md text-sm font-medium transition-shadow">
+                  Browse Insights
+                  <ArrowUpRight className="h-4 w-4 ml-2" />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* KRAFT Agent */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-8 hover:border-blue-300 hover:shadow-lg transition-all group cursor-pointer">
+            <div className="flex items-start space-x-4">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600">
+                <Zap className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">
+                  KRAFT Agent
+                </h3>
+                <p className="text-slate-600 mb-4">
+                  Create a new campaign using agentic AI. Let KRAFT Agent build, optimize, and launch campaigns with intelligent automation.
+                </p>
+                <button className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg rounded-md text-sm font-medium transition-shadow">
+                  Launch Agent
+                  <Sparkles className="h-4 w-4 ml-2" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Quick Actions */}
+        {/* <div className={`${themeClasses.cardBg} ${themeClasses.border} border rounded-2xl p-6`}>
+          <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Quick Actions</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button className={`p-4 ${themeClasses.border} border rounded-xl ${themeClasses.hover} transition-colors text-center`}>
+              <Download className={`mx-auto mb-2 ${themeClasses.textSecondary}`} size={24} />
+              <p className={`text-sm font-medium ${themeClasses.text}`}>Export Data</p>
+            </button>
+            <button className={`p-4 ${themeClasses.border} border rounded-xl ${themeClasses.hover} transition-colors text-center`}>
+              <Share2 className={`mx-auto mb-2 ${themeClasses.textSecondary}`} size={24} />
+              <p className={`text-sm font-medium ${themeClasses.text}`}>Share Report</p>
+            </button>
+            <button className={`p-4 ${themeClasses.border} border rounded-xl ${themeClasses.hover} transition-colors text-center`}>
+              <Calendar className={`mx-auto mb-2 ${themeClasses.textSecondary}`} size={24} />
+              <p className={`text-sm font-medium ${themeClasses.text}`}>Schedule Report</p>
+            </button>
+            <button className={`p-4 ${themeClasses.border} border rounded-xl ${themeClasses.hover} transition-colors text-center`}>
+              <BarChart3 className={`mx-auto mb-2 ${themeClasses.textSecondary}`} size={24} />
+              <p className={`text-sm font-medium ${themeClasses.text}`}>Advanced Analytics</p>
+            </button>
+          </div>
+        </div> */}
       </div>
-
-      {/* View Publishing Modal */}
-      {showPublishingModal && selectedCampaign && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className={`${themeClasses.cardBg} rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl`}>
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Eye className="text-white" size={28} />
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Publishing Details</h2>
-                  <p className="text-blue-100 text-sm">{selectedCampaign.name}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowPublishingModal(false)}
-                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="text-white" size={24} />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className={`p-6 ${themeClasses.gradient} rounded-xl`}>
-                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Publishing Schedule</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Platform:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.channel}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Start Date:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.activationDate}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Status:</span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(getCampaignStatus(selectedCampaign))}`}>
-                        {getCampaignStatus(selectedCampaign).toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`p-6 ${themeClasses.gradient} rounded-xl`}>
-                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Content Details</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Product:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.product}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Impressions:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.performance.impressions.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Engagement:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.performance.clicks.toLocaleString()} clicks</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`p-6 ${themeClasses.gradient} rounded-xl md:col-span-2`}>
-                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Campaign Description</h3>
-                  <p className={themeClasses.text}>{selectedCampaign.description}</p>
-                </div>
-
-                <div className={`p-6 bg-blue-50 rounded-xl md:col-span-2`}>
-                  <h3 className={`text-lg font-semibold text-blue-900 mb-3`}>Publishing Channels</h3>
-                  <div className="flex items-center space-x-4">
-                    {getChannelIcon(selectedCampaign.channel)}
-                    <span className="text-blue-900 font-semibold">{selectedCampaign.channel}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={`p-6 border-t ${themeClasses.border} flex justify-end`}>
-              <button
-                onClick={() => setShowPublishingModal(false)}
-                className="px-6 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Monitor Campaign Modal */}
-      {showMonitorModal && selectedCampaign && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className={`${themeClasses.cardBg} rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl`}>
-            <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Activity className="text-white" size={28} />
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Campaign Monitoring</h2>
-                  <p className="text-green-100 text-sm">{selectedCampaign.name}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowMonitorModal(false)}
-                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="text-white" size={24} />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="p-4 bg-blue-50 rounded-xl text-center">
-                  <Eye className="mx-auto mb-2 text-blue-600" size={32} />
-                  <p className="text-2xl font-bold text-blue-900">{selectedCampaign.performance.impressions.toLocaleString()}</p>
-                  <p className="text-sm text-blue-700">Impressions</p>
-                </div>
-                <div className="p-4 bg-yellow-50 rounded-xl text-center">
-                  <MousePointer className="mx-auto mb-2 text-yellow-600" size={32} />
-                  <p className="text-2xl font-bold text-yellow-900">{selectedCampaign.performance.clicks.toLocaleString()}</p>
-                  <p className="text-sm text-yellow-700">Clicks</p>
-                </div>
-                <div className="p-4 bg-green-50 rounded-xl text-center">
-                  <CheckCircle className="mx-auto mb-2 text-green-600" size={32} />
-                  <p className="text-2xl font-bold text-green-900">{selectedCampaign.performance.conversions}</p>
-                  <p className="text-sm text-green-700">Conversions</p>
-                </div>
-                <div className="p-4 bg-purple-50 rounded-xl text-center">
-                  <TrendUp className="mx-auto mb-2 text-purple-600" size={32} />
-                  <p className="text-2xl font-bold text-purple-900">{selectedCampaign.performance.ctr}%</p>
-                  <p className="text-sm text-purple-700">CTR</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div className={`p-6 ${themeClasses.gradient} rounded-xl`}>
-                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Budget Performance</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Total Spend:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>₹{selectedCampaign.spend.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>CPC:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>₹{selectedCampaign.performance.cpc}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>ROAS:</span>
-                      <span className={`font-semibold text-green-600`}>{selectedCampaign.performance.roas}x</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`p-6 ${themeClasses.gradient} rounded-xl`}>
-                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Lead Generation</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Total Leads:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.leads}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Sales:</span>
-                      <span className={`font-semibold ${themeClasses.text}`}>{selectedCampaign.sales}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={themeClasses.textSecondary}>Conversion Rate:</span>
-                      <span className={`font-semibold text-green-600`}>{selectedCampaign.cnv}%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl`}>
-                <h3 className={`text-lg font-semibold ${themeClasses.text} mb-3`}>Real-time Status</h3>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 rounded-full ${getCampaignStatus(selectedCampaign) === 'active' ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`}></div>
-                    <span className={`font-semibold ${themeClasses.text}`}>
-                      Campaign is {getCampaignStatus(selectedCampaign) === 'active' ? 'running' : getCampaignStatus(selectedCampaign)}
-                    </span>
-                  </div>
-                  <span className={themeClasses.textSecondary}>Last updated: Just now</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={`p-6 border-t ${themeClasses.border} flex justify-end`}>
-              <button
-                onClick={() => setShowMonitorModal(false)}
-                className="px-6 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* View Segment Modal */}
-      {showSegmentModal && selectedCampaign && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className={`${themeClasses.cardBg} rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl`}>
-            <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Users className="text-white" size={28} />
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Audience Segment</h2>
-                  <p className="text-purple-100 text-sm">{selectedCampaign.segmentName}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowSegmentModal(false)}
-                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="text-white" size={24} />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div className={`p-6 bg-purple-50 rounded-xl`}>
-                  <h3 className={`text-lg font-semibold text-purple-900 mb-4`}>Segment Overview</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-purple-700">Segment Name:</span>
-                      <span className="font-semibold text-purple-900">{selectedCampaign.segmentName}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-purple-700">Segment Size:</span>
-                      <span className="font-semibold text-purple-900">{selectedCampaign.segmentSize.toLocaleString()} people</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-purple-700">Campaign:</span>
-                      <span className="font-semibold text-purple-900">{selectedCampaign.name}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`p-6 bg-blue-50 rounded-xl`}>
-                  <h3 className={`text-lg font-semibold text-blue-900 mb-4`}>Engagement Metrics</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-blue-700">Reached:</span>
-                      <span className="font-semibold text-blue-900">{Math.floor(selectedCampaign.segmentSize * 0.65).toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-700">Engaged:</span>
-                      <span className="font-semibold text-blue-900">{Math.floor(selectedCampaign.segmentSize * 0.42).toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-700">Converted:</span>
-                      <span className="font-semibold text-green-600">{selectedCampaign.leads}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`p-6 ${themeClasses.gradient} rounded-xl mb-6`}>
-                <h3 className={`text-lg font-semibold ${themeClasses.text} mb-4`}>Demographic Breakdown</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-600">35%</p>
-                    <p className={`text-sm ${themeClasses.textSecondary}`}>18-24 years</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-green-600">42%</p>
-                    <p className={`text-sm ${themeClasses.textSecondary}`}>25-34 years</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-yellow-600">18%</p>
-                    <p className={`text-sm ${themeClasses.textSecondary}`}>35-44 years</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-purple-600">5%</p>
-                    <p className={`text-sm ${themeClasses.textSecondary}`}>45+ years</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className={`p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl`}>
-                <h3 className={`text-lg font-semibold ${themeClasses.text} mb-3`}>Segment Targeting</h3>
-                <p className={themeClasses.text}>This segment includes {selectedCampaign.segmentName.toLowerCase()} interested in {selectedCampaign.product} products. The audience is highly engaged with automotive content and has shown strong purchase intent signals.</p>
-              </div>
-            </div>
-
-            <div className={`p-6 border-t ${themeClasses.border} flex justify-end space-x-3`}>
-              <button
-                onClick={() => setShowSegmentModal(false)}
-                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => {
-                  setShowSegmentModal(false);
-                  alert('Exporting segment data...');
-                }}
-                className="px-6 py-3 bg-purple-500 text-white rounded-xl font-semibold hover:bg-purple-600 transition-colors flex items-center space-x-2"
-              >
-                <Download size={18} />
-                <span>Export Data</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         @keyframes fade-in {
